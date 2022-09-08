@@ -9,7 +9,7 @@ edges_file_path = RESOURCES_PATH / "bio_small.edges"
 def main():
     # G = nx.read_edgelist(edges_file_path)
     G = nx.fast_gnp_random_graph(20, 0.2, seed=12)
-    print_graph(G)
+    # print_graph(G)
     take_measuraments(G)
 
 
