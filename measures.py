@@ -1,37 +1,77 @@
 import networkx as nx
 from collections import Counter
-from statistics import pvariance, pstdev
+from plotting import plot_distribution, print_subgraphs
+from statistics import pvariance
+from math import sqrt
 
 
 def take_measuraments(G):
     N = len(G.nodes)
 
-    # distance
-    # APL = nx.average_shortest_path_length(G)
-    # distance_distributon = distance_distributions(G,N)
+    # distance_measurements(G, N)
 
-    # degree
-    degree_distribution = [i for _, i in G.degree]
-    average_degree = get_average_degree(N, degree_distribution)
-    degree_variance = pvariance(degree_distribution)
-    degree_standard_deviation = pstdev(degree_variance)
+    # degree_measurements(G, N)
+
+    # clustering_coefficent = nx.clustering(G)
+    # plot_distribution(clustering_coefficent, "Clustering coefficent", "Vertex", "Coefficent")
+
+    # largest connected component
+    largest_cc = max(nx.connected_components(G), key=len)
+    component = G.subgraph(largest_cc)
+    print_subgraphs(G, component, "Largest connected  component")
+
+    # degree correlation
+    # r = nx.degree_pearson_correlation_coefficient(G)
+    # print("Degree correlation: ", "%.2f" % r)
+
+    # communnities
+    # communities_generator = nx.community.girvan_newman(G)
+    # print()
+
+    # centralties
+    # DC = nx.degree_centrality(G)
+    # CC = nx.closeness_centrality(G)
+    # BC = nx.betweenness_centrality(G)
+
     return
 
 
-def get_max_degree(G:nx.Graph):
-    degree_sequence = sorted((d for n, d in G.degree()), reverse=True)
-    return max(degree_sequence)
-
-
-def get_distance_distributions(G : nx.Graph, N):
+def distance_distributions(G : nx.Graph, N):
     paths_dict = dict(nx.all_pairs_shortest_path_length(G))
     lenghts = [value for k in paths_dict.values() for value in k.values()]
-    k_distances = Counter(lenghts)
-    return {int(k): val/N for k, val in k_distances.items()}
+    counts = Counter(lenghts)
+    return {str(k): val / N for k, val in counts.items()}
 
 
-def get_average_degree(N, degree_distribution):
+def average_degree(N, degree_distribution):
     degree_sum = sum(degree_distribution)
     return degree_sum/N
 
+
+def distance_measurements(G, N):
+    AD = nx.average_shortest_path_length(G)
+    DistanceD = distance_distributions(G, N)
+    plot_distribution(DistanceD, "Distance distribution", "Distance", "Frequency")
+    print("Average distance: ", "%.2f" % AD)
+
+
+def degree_measurements(G, N):
+    DegreeD = degree_distribution(G, N)
+    plot_distribution(DegreeD, "Degree distribution", "Degree", "Frequency")
+
+    AD = average_degree(N, DegreeD.values())
+    print("Average degree: ", "%.2f" % AD)
+
+    degree_variance = pvariance(DegreeD.values())
+    print("Degree variance: ", "%.4f" % degree_variance)
+
+    degree_standard_deviation = sqrt(degree_variance)
+    print("Degree standard deviation: ", "%.4f" % degree_standard_deviation)
+
+
+def degree_distribution(G,N):
+    degrees = [i for _, i in G.degree]
+    degree_counts = Counter(degrees)
+    ordered_d = sorted(degree_counts.items())
+    return {k: val / N for k, val in ordered_d}
 

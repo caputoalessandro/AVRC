@@ -1,22 +1,15 @@
 import networkx as nx
 from resources.resources_path import RESOURCES_PATH
-import matplotlib.pyplot as plt
 from measures import take_measuraments
+from plotting import print_graph
 
 edges_file_path = RESOURCES_PATH / "bio_small.edges"
 
 
 def main():
-    # G = nx.read_edgelist(edges_file_path)
-    G = nx.fast_gnp_random_graph(20, 0.2, seed=12)
-    # print_graph(G)
+    G = nx.fast_gnp_random_graph(30, 0.5)
     take_measuraments(G)
-
-
-def print_graph(G):
-    pos = nx.spring_layout(G, seed=47)  # Seed layout for reproducibility
-    nx.draw(G, pos=pos)
-    plt.show()
+    print_graph(G, "Full graph")
 
 
 if __name__ == "__main__":
