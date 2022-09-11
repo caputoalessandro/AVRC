@@ -1,6 +1,6 @@
 import networkx as nx
 from collections import Counter
-from plotting import plot_distribution, print_subgraphs
+from plotting import plot_distribution, print_subgraphs, print_communities
 from statistics import pvariance
 from math import sqrt
 
@@ -8,12 +8,13 @@ from math import sqrt
 def take_measuraments(G):
     N = len(G.nodes)
 
-    # distance_measurements(G, N)
+    distance_measurements(G, N)
 
-    # degree_measurements(G, N)
+    degree_measurements(G, N)
 
-    # clustering_coefficent = nx.clustering(G)
-    # plot_distribution(clustering_coefficent, "Clustering coefficent", "Vertex", "Coefficent")
+    # clustering coefficent
+    clustering_coefficent = nx.clustering(G)
+    plot_distribution(clustering_coefficent, "Clustering coefficent", "Vertex", "Coefficent")
 
     # largest connected component
     largest_cc = max(nx.connected_components(G), key=len)
@@ -21,17 +22,16 @@ def take_measuraments(G):
     print_subgraphs(G, component, "Largest connected  component")
 
     # degree correlation
-    # r = nx.degree_pearson_correlation_coefficient(G)
-    # print("Degree correlation: ", "%.2f" % r)
+    r = nx.degree_pearson_correlation_coefficient(G)
+    print("Degree correlation: ", "%.2f" % r)
 
     # communnities
-    # communities_generator = nx.community.girvan_newman(G)
-    # print()
+    communities_generator = nx.community.girvan_newman(G)
+    print_communities(G, communities_generator, 10)
 
-    # centralties
-    # DC = nx.degree_centrality(G)
-    # CC = nx.closeness_centrality(G)
-    # BC = nx.betweenness_centrality(G)
+    centralities(G)
+
+    print("\nPlots saved in output folder")
 
     return
 
@@ -53,7 +53,7 @@ def distance_measurements(G, N):
     DistanceD = distance_distributions(G, N)
     plot_distribution(DistanceD, "Distance distribution", "Distance", "Frequency")
     print("Average distance: ", "%.2f" % AD)
-
+    return
 
 def degree_measurements(G, N):
     DegreeD = degree_distribution(G, N)
@@ -67,7 +67,7 @@ def degree_measurements(G, N):
 
     degree_standard_deviation = sqrt(degree_variance)
     print("Degree standard deviation: ", "%.4f" % degree_standard_deviation)
-
+    return
 
 def degree_distribution(G,N):
     degrees = [i for _, i in G.degree]
@@ -75,3 +75,12 @@ def degree_distribution(G,N):
     ordered_d = sorted(degree_counts.items())
     return {k: val / N for k, val in ordered_d}
 
+
+def centralities(G):
+    DC = nx.degree_centrality(G)
+    CC = nx.closeness_centrality(G)
+    BC = nx.betweenness_centrality(G)
+    plot_distribution(DC, "Degree distribution", "Nodes", "centrality")
+    plot_distribution(CC, "Closeness centrality", "Nodes", "centrality")
+    plot_distribution(BC, "Betweeness centrality", "Edges", "centrality")
+    return

@@ -7,7 +7,7 @@ edges_file_path = RESOURCES_PATH / "bio_small.edges"
 
 
 def main():
-    G = nx.fast_gnp_random_graph(30, 0.5)
+    G = nx.karate_club_graph()
     take_measuraments(G)
     print_graph(G, "Full graph")
 
