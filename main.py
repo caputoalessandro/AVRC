@@ -1,15 +1,23 @@
-import networkx as nx
-from resources.resources_path import RESOURCES_PATH
 from measures import take_measuraments
 from plotting import print_graph
-
-edges_file_path = RESOURCES_PATH / "bio_small.edges"
+from utils import read_edges
 
 
 def main():
-    G = nx.karate_club_graph()
+    G = read_edges("bio-yeast-protein-inter.edges")
+    # G = G.subgraph(range(100))
+    print_graph(G, title="Full_graph")
     take_measuraments(G)
-    print_graph(G, "Full graph")
+
+    # nx.drawing.nx_pydot.write_dot(G, RESOURCES_PATH / "test.dot")
+
+    # WRITE FOR GEPHI
+    # nx.write_gexf(G, "output/test.gexf")
+
+    #GRAPHVIZ
+    # s = Source.from_file(RESOURCES_PATH / "test.dot")
+    # s.view()
+    return
 
 
 if __name__ == "__main__":
