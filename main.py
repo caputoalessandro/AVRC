@@ -8,7 +8,7 @@ def main():
     # G = G.subgraph(range(100))
     print_graph(G, title="Full_graph")
     take_measuraments(G)
-
+    #
     # nx.drawing.nx_pydot.write_dot(G, RESOURCES_PATH / "test.dot")
 
     # WRITE FOR GEPHI

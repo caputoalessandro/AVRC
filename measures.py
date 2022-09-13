@@ -3,39 +3,41 @@ from collections import Counter
 from plotting import plot_distribution, print_communities, print_graph
 from statistics import pvariance
 from math import sqrt
+from utils import get_one_node_for_degree_from_list, get_node_list_from_dict
 
 
 def take_measuraments(G : nx.Graph):
     N = len(G.nodes)
 
-    print("Degree measuraments")
-    degree_measurements(G, N)
+    # print("Degree measuraments")
+    # degree_measurements(G, N)
 
-    print("Clustering measuraments")
-    # clustering coefficent
-    clustering_coefficent = nx.clustering(G)
-    plot_distribution(clustering_coefficent, "Clustering coefficent", "Vertex", "Coefficent",100,10)
+    # print("Clustering measuraments")
+    # # clustering coefficent
+    # clustering_coefficent = nx.average_clustering(G)
+    # print("Clustering coefficent: ", "%.3f" % clustering_coefficent)
+    # # plot_distribution(clustering_coefficent, "Clustering coefficent", "Vertex", "Coefficent",100,10)
 
-    print("Largest connected component measurament")
-    # largest connected component
-    largest_cc = max(nx.connected_components(G), key=len)
-    largest_cc_sub = G.subgraph(largest_cc)
-    print_graph(G, largest_cc_sub, title="Largest_connected_component")
+    # print("Largest connected component measurament")
+    # # largest connected component
+    # largest_cc = max(nx.connected_components(G), key=len)
+    # largest_cc_sub = G.subgraph(largest_cc)
+    # print_graph(G, largest_cc_sub, title="Largest_connected_component")
 
-    print("Distances measuraments")
-    distance_measurements(G, N, largest_cc_sub)
+    # # print("Distances measuraments")
+    # # distance_measurements(G, N, largest_cc_sub)
+    #
+    # print("Degree correlation measurament")
+    # # degree correlation
+    # r = nx.degree_pearson_correlation_coefficient(G)
+    # print("Degree correlation: ", "%.2f" % r)
 
-    print("Degree correlation measurament")
-    # degree correlation
-    r = nx.degree_pearson_correlation_coefficient(G)
-    print("Degree correlation: ", "%.2f" % r)
-
-    print("communities calculation")
-    # communnities
-    # subgraph = G.edge_subgraph(largest_cc_sub.edges(range(0, 10)))
-    subgraph = largest_cc_sub
-    communities_generator = nx.community.girvan_newman(subgraph)
-    print_communities(subgraph, communities_generator, 3)
+    # print("communities calculation")
+    # # communnities
+    # # subgraph = G.edge_subgraph(largest_cc_sub.edges(range(0, 10)))
+    # subgraph = largest_cc_sub
+    # communities_generator = nx.community.girvan_newman(subgraph)
+    # print_communities(subgraph, communities_generator, 3)
 
     # print("centralities measuraments")
     centralities(G)
@@ -87,13 +89,17 @@ def degree_distribution(G, N):
     return {k: val / N for k, val in ordered_d}
 
 
-def centralities(G):
-    x = 100
-    y = 10
+def centralities(G : nx.Graph):
     DC = nx.degree_centrality(G)
     CC = nx.closeness_centrality(G)
     BC = nx.betweenness_centrality(G)
-    plot_distribution(DC, "Degree centrality", "Nodes", "centrality",x,y)
-    plot_distribution(CC, "Closeness centrality", "Nodes", "centrality",x,y)
-    plot_distribution(BC, "Betweeness centrality", "Nodes", "centrality",x,y)
+
+    nodes = get_one_node_for_degree_from_list(G)
+    DC_to_plot = get_node_list_from_dict(DC, nodes)
+    CC_to_plot = get_node_list_from_dict(CC, nodes)
+    BC_to_plot = get_node_list_from_dict(BC, nodes)
+
+    plot_distribution(DC_to_plot, "Degree centrality", "Degree", "centrality")
+    plot_distribution(CC_to_plot, "Closeness centrality", "Degree", "centrality")
+    plot_distribution(BC_to_plot, "Betweeness centrality", "Degree", "centrality")
     return

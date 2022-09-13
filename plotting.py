@@ -20,21 +20,21 @@ def plot_distribution(distribution: dict, title, xlabel, ylabel, x_size=6.4, y_s
     return
 
 
-def draw_graph(G, subG=None, title="", node_s=1, w=0.1):
+def draw_graph(G, subG=None, title=""):
     plt.figure(figsize=(20, 14))
     plt.axis('off')
     plt.title(title)
     pos = nx.spring_layout(G, seed=47)
-    nx.draw(G, pos=pos, node_color='#6495ED', node_size=node_s, width=w)
+    nx.draw(G, pos=pos, node_color='#6495ED', node_size=20, width=0.1)
     if subG:
-        nx.draw(subG, pos=pos, node_color="#DC143C", node_size=node_s, width=w)
+        nx.draw(subG, pos=pos, node_color="#DC143C", node_size=20, width=0.1)
     return
 
 
-def print_graph(G, subG=None, title="", node_s=1, w=0.1):
+def print_graph(G, subG=None, title=""):
     os.makedirs(os.path.dirname(DIR), exist_ok=True)
-    draw_graph(G, subG, title, node_s, w)
-    plt.savefig('output/ ' + str(title) + ".pdf", dpi=1000)
+    draw_graph(G, subG, title)
+    plt.savefig('output/' + str(title) + ".pdf", dpi=1000)
     return
 
 
@@ -46,31 +46,10 @@ def print_communities(G, c_generator, k):
         draw_graph(G, None, title="Communities: step " + str(step))
         for c in communities:
             subG = G.subgraph(c)
-            nx.draw(subG, pos, node_color=get_random_color(), node_size=1, width=0.1)
+            nx.draw(subG, pos, node_color=get_random_color(), node_size=20, width=0.1)
         plt.savefig('output/communities/step_' + str(step) + ".pdf", dpi=1000)
         step = step + 1
     return
-
-
-# def print_communities(G, communities, k):
-#     plt.figure(figsize=(20, 14))
-#     plt.axis('off')
-#     pos = nx.spring_layout(G, seed=47)
-#     step = 1
-#
-#     for community in islice(communities, k):
-#         plt.title("Communities: step " + str(step))
-#         nx.draw(G, pos=pos, node_color='#6495ED', node_size=100, width=1)
-#         for e in community:
-#             subG = G.subgraph(e)
-#             nx.draw(subG, pos=pos, node_color=get_random_color(), node_size=100, width=1)
-#
-#         plt.savefig('output/communities/step_' + str(step),dpi=1000)
-#         step = step + 1
-#
-#         if len(community) > k:
-#             return
-#     return
 
 
 def get_random_color():
