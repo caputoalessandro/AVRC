@@ -9,40 +9,40 @@ from utils import get_one_node_for_degree_from_list, get_node_list_from_dict
 def take_measuraments(G : nx.Graph):
     N = len(G.nodes)
 
-    # print("Degree measuraments")
-    # degree_measurements(G, N)
+    print("Degree measuraments")
+    degree_measurements(G, N)
 
-    # print("Clustering measuraments")
-    # # clustering coefficent
-    # clustering_coefficent = nx.average_clustering(G)
-    # print("Clustering coefficent: ", "%.3f" % clustering_coefficent)
-    # # plot_distribution(clustering_coefficent, "Clustering coefficent", "Vertex", "Coefficent",100,10)
+    print("Clustering measuraments")
+    # clustering coefficent
+    clustering_coefficent = nx.average_clustering(G)
+    print("Clustering coefficent: ", "%.3f" % clustering_coefficent)
+    # plot_distribution(clustering_coefficent, "Clustering coefficent", "Vertex", "Coefficent",100,10)
 
-    # print("Largest connected component measurament")
-    # # largest connected component
-    # largest_cc = max(nx.connected_components(G), key=len)
-    # largest_cc_sub = G.subgraph(largest_cc)
-    # print_graph(G, largest_cc_sub, title="Largest_connected_component")
+    print("Largest connected component measurament")
+    # largest connected component
+    largest_cc = max(nx.connected_components(G), key=len)
+    largest_cc_sub = G.subgraph(largest_cc)
+    print_graph(G, largest_cc_sub, title="Largest_connected_component")
 
-    # # print("Distances measuraments")
-    # # distance_measurements(G, N, largest_cc_sub)
-    #
-    # print("Degree correlation measurament")
-    # # degree correlation
-    # r = nx.degree_pearson_correlation_coefficient(G)
-    # print("Degree correlation: ", "%.2f" % r)
+    print("Distances measuraments")
+    distance_measurements(G, N, largest_cc_sub)
 
-    # print("communities calculation")
-    # # communnities
-    # # subgraph = G.edge_subgraph(largest_cc_sub.edges(range(0, 10)))
-    # subgraph = largest_cc_sub
-    # communities_generator = nx.community.girvan_newman(subgraph)
-    # print_communities(subgraph, communities_generator, 3)
+    print("Degree correlation measurament")
+    # degree correlation
+    r = nx.degree_pearson_correlation_coefficient(G)
+    print("Degree correlation: ", "%.2f" % r)
 
-    # print("centralities measuraments")
+    print("communities calculation")
+    # communnities
+    # subgraph = G.edge_subgraph(largest_cc_sub.edges(range(0, 10)))
+    subgraph = largest_cc_sub
+    communities_generator = nx.community.girvan_newman(subgraph)
+    print_communities(subgraph, communities_generator, 3)
+
+    print("centralities measuraments")
     centralities(G)
 
-    # print("\nPlots saved in output folder")
+    print("\nPlots saved in output folder")
 
     return
 
